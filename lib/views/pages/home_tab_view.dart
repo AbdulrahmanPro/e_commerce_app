@@ -25,7 +25,7 @@ class HomeTabView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SliderWidget(),
+            SliderWidget(),
             const SizedBox(height: 24),
             Category(),
             const SizedBox(height: 16),
