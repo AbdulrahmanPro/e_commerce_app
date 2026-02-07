@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce/models/product_item_model.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,8 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    // final isLandscape =
+    //     MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Card(
       elevation: 1,
@@ -43,12 +44,12 @@ class ProductItem extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(isDesktop ? 6 : 4),
-                    child: Image.network(
-                      product.imageUrl,
+                    child: CachedNetworkImage(
+                      imageUrl: product.imageUrl,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
-                      errorBuilder: (context, error, stackTrace) {
+                      errorWidget: (context, url, error) {
                         return Container(
                           color: Colors.grey[100],
                           child: Icon(
@@ -62,18 +63,15 @@ class ProductItem extends StatelessWidget {
                           ),
                         );
                       },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                value: downloadProgress.progress,
+                              ),
+                            );
+                          },
                     ),
                   ),
                   Positioned(
@@ -177,7 +175,7 @@ class ProductItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Theme.of(
                         context,
-                      ).colorScheme.primary.withOpacity(0.1),
+                      ).colorScheme.primary.withAlpha(30),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: IconButton(

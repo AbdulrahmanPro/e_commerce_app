@@ -55,4 +55,41 @@ List<ProductItemModel> dummyProducts = [
         'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80',
     category: 'Home Appliances',
   ),
+  ProductItemModel(
+    id: '5',
+    name: 'Leather Wallet',
+    description: 'A stylish leather wallet with multiple card slots.',
+    price: 39.99,
+    imageUrl:
+        'https://images.unsplash.com/photo-1512499617640-c2f999fe8c9e?auto=format&fit=crop&w=800&q=80',
+    category: 'Accessories',
+  ),
+  ProductItemModel(
+    id: '6',
+    name: 'Yoga Mat',
+    description: 'A non-slip yoga mat for all your fitness needs.',
+    price: 29.99,
+    imageUrl:
+        'https://images.unsplash.com/photo-1594737625785-1b9c8e0a1f3c?auto=format&fit=crop&w=800&q=80',
+    category: 'Fitness',
+  ),
+  ProductItemModel(
+    id: '7',
+    name: 'Sunglasses',
+    description: 'UV-protected sunglasses with a trendy design.',
+    price: 59.99,
+    imageUrl:
+        'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+    category: 'Accessories',
+  ),
+  ProductItemModel(
+    id: '8',
+    name: 'Backpack',
+    description:
+        'A durable backpack with multiple compartments for organization.',
+    price: 89.99,
+    imageUrl:
+        'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80',
+    category: 'Bags',
+  ),
 ];
