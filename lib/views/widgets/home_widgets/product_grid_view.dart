@@ -1,6 +1,8 @@
-import 'package:e_commerce/models/product_item_model.dart';
+
+import 'package:e_commerce/view_model/cubit/home_cubit_cubit.dart';
 import 'package:e_commerce/views/widgets/product_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductGridView extends StatelessWidget {
   final bool isDesktop;
@@ -14,54 +16,90 @@ class ProductGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen width for responsive grid
+    // احصل على عرض الشاشة للشبكة المتجاوبة
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocProvider(
+      create: (context) => HomeCubit()..getHomeData(),
+      child: Builder(
+        // أضف ويدجت Builder هنا
+        builder: (blocContext) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Featured Products',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'المنتجات المميزة',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextButton(onPressed: () {}, child: const Text('عرض الكل')),
+                  ],
+                ),
               ),
-              TextButton(onPressed: () {}, child: const Text('View All')),
-            ],
-          ),
-        ),
 
-        // Calculate crossAxisCount based on screen width
-        GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: _getCrossAxisCount(screenWidth),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 0.65,
-          ),
-          itemBuilder: (context, index) => ProductItem(
-            product: dummyProducts[index],
-            isDesktop: isDesktop,
-            isTablet: isTablet,
-          ),
-          itemCount: dummyProducts.length,
-          shrinkWrap: true, // Important: Allows GridView to shrink-wrap content
-          physics:
-              const NeverScrollableScrollPhysics(), // Important: Prevents nested scrolling
-        ),
-      ],
+              // حساب crossAxisCount بناءً على عرض الشاشة
+              BlocBuilder<HomeCubit, HomeCubitState>(
+                bloc: BlocProvider.of<HomeCubit>(
+                  blocContext,
+                ), // استخدم blocContext هنا
+                builder: (context, state) {
+                  if (state is HomeCubitLoading) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else if (state is HomeCubitFailure) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text(
+                          state.errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  } else if (state is HomeCubitLoaded) {
+                    final products = state.products;
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: _getCrossAxisCount(screenWidth),
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 0.65,
+                      ),
+                      itemBuilder: (context, index) => ProductItem(
+                        product: products[index],
+                        isDesktop: isDesktop,
+                        isTablet: isTablet,
+                      ),
+                      itemCount: products.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
   int _getCrossAxisCount(double screenWidth) {
-    if (screenWidth > 900) return 4; // Large desktop
-    if (screenWidth > 700) return 3; // Desktop
-    if (screenWidth > 500) return 2; // Tablet
-    return 2; // Mobile
+    if (screenWidth > 900) return 4; // سطح مكتب كبير
+    if (screenWidth > 700) return 3; // سطح مكتب
+    if (screenWidth > 500) return 2; // لوحي
+    return 2; // جوال
   }
 }

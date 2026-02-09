@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce/models/category_model.dart';
 import 'package:flutter/material.dart';
 
 class CategoryTabView extends StatelessWidget {
@@ -41,10 +43,11 @@ class CategoryTabView extends StatelessWidget {
                 crossAxisSpacing: 16,
                 childAspectRatio: 0.8,
               ),
-              itemCount: 12, // Example count
+              itemCount: dummyCategories.length, // Example count
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
+                final category = dummyCategories[index];
                 return Card(
                   child: Column(
                     children: [
@@ -52,15 +55,26 @@ class CategoryTabView extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey[200],
+                            color: category.bgColor,
+                            image: category.imageUrl != null
+                                ? DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                      category.imageUrl!,
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Category $index',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
+                          category.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: category.textColor,
+                          ),
                         ),
                       ),
                     ],

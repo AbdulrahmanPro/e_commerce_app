@@ -8,4 +8,6 @@ class AppColors {
   static const Color borderColor = Colors.white54;
   static const Color shadowColor = Colors.grey;
   static Color greywithopitcty = Colors.grey.withAlpha(100);
+
 }
+
