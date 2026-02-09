@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:e_commerce/view_model/cubit/home_cubit_cubit.dart';
 import 'package:e_commerce/views/widgets/product_item.dart';
